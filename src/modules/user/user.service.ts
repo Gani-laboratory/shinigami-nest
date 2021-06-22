@@ -9,7 +9,23 @@ export class UserService {
     @InjectModel(User.name) private readonly UserModel: Model<UserDocument>,
   ) {}
 
-  getAll() {
-    return this.UserModel.find().exec();
+  async getAll() {
+    return await this.UserModel.find();
+  }
+
+  async get(key: string, value: string) {
+    return await this.UserModel.findOne({ _id: value });
+  }
+
+  async create(body: Pick<UserDocument, 'email' | 'password'>) {
+    return await (await this.UserModel.create(body)).save();
+  }
+
+  async edit(_id: string, body: Pick<UserDocument, 'email' | 'password'>) {
+    return await this.UserModel.findOneAndUpdate({ _id }, body, { new: true });
+  }
+
+  async delete(_id: string) {
+    return await this.UserModel.findOneAndDelete({ _id });
   }
 }
