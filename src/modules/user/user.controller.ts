@@ -1,5 +1,6 @@
 import {
   Body,
+  HttpCode,
   Controller,
   Delete,
   Get,
@@ -20,6 +21,7 @@ export class UserController {
   }
 
   @Post()
+  @HttpCode(201)
   create(@Body() body: UserDto) {
     return this.Service.create(body);
   }
