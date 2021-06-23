@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot(process.env.MONGO_URI, {
       autoCreate: true,
       useFindAndModify: false,
+      useCreateIndex: true,
     }),
   ],
 })

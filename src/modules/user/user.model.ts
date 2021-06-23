@@ -5,7 +5,7 @@ export type UserDocument = User & Document;
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
   @Prop()

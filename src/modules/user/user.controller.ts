@@ -8,6 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { UserDto } from '../../filters/user.filter';
 
 @Controller('user')
 export class UserController {
@@ -19,8 +20,8 @@ export class UserController {
   }
 
   @Post()
-  create(@Body('email') email: string, @Body('password') password: string) {
-    return this.Service.create({ email, password });
+  create(@Body() body: UserDto) {
+    return this.Service.create(body);
   }
 
   @Get(':id')
@@ -29,12 +30,8 @@ export class UserController {
   }
 
   @Put(':id')
-  edit(
-    @Param('id') id: string,
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    return this.Service.edit(id, { email, password });
+  edit(@Param('id') id: string, @Body() body: UserDto) {
+    return this.Service.edit(id, body);
   }
 
   @Delete(':id')
