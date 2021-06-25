@@ -7,16 +7,21 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from '../../filters/user.filter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly Service: UserService) {}
 
   @Get()
-  showAll() {
+  @UseGuards(AuthGuard())
+  showAll(@Req() req: any) {
+    console.log(req.user);
     return this.Service.getAll();
   }
 
