@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.model';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -16,14 +17,15 @@ export class UserService {
     return user;
   }
 
-  async get(key: string, value: string) {
+  async get(
+    key: string,
+    value: string,
+    errMsg = `user with ${key} ${value} not found`,
+    statusCode = HttpStatus.NOT_FOUND,
+  ) {
     try {
       const user = await this.UserModel.findOne({ [key]: value });
-      if (!user)
-        throw new HttpException(
-          `user with ${key} ${value} not found`,
-          HttpStatus.NOT_FOUND,
-        );
+      if (!user) throw new HttpException(errMsg, statusCode);
       return user;
     } catch (e) {
       if (e.name === 'CastError')
@@ -47,9 +49,15 @@ export class UserService {
 
   async edit(_id: string, body: Pick<UserDocument, 'email' | 'password'>) {
     try {
-      const user = await this.UserModel.findOneAndUpdate({ _id }, body, {
-        new: true,
-      });
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(body.password, salt);
+      const user = await this.UserModel.findOneAndUpdate(
+        { _id },
+        { ...body, password },
+        {
+          new: true,
+        },
+      );
       if (!user)
         throw new HttpException(
           `user with id ${_id} not found`,
