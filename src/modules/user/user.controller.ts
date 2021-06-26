@@ -7,21 +7,19 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
-  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from '../../filters/user.filter';
-import { AuthGuard } from '@nestjs/passport';
+import { Auth } from '../../decorators/auth.decorator';
+import { RoleType } from '../auth/role-types';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly Service: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard())
-  showAll(@Req() req: any) {
-    console.log(req.user);
+  @Auth(RoleType.admin)
+  showAll() {
     return this.Service.getAll();
   }
 
