@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 import { UserDto, UserPutDto } from '../../filters/user.filter';
 import { Auth } from '../../decorators/auth.decorator';
 import { RoleType } from '../auth/role-types';
-import { UserUpdatePipe } from 'src/user-update.pipe';
+import { UserUpdatePipe } from './user.pipe';
 
 @Controller('user')
 export class UserController {
