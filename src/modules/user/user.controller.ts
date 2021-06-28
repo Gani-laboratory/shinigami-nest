@@ -7,13 +7,13 @@ import {
   Param,
   Post,
   Put,
-  UsePipes,
+  // UsePipes,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto, UserPutDto } from '../../filters/user.filter';
+import { UserDto } from '../../filters/user.filter';
 import { Auth } from '../../decorators/auth.decorator';
 import { RoleType } from '../auth/role-types';
-import { UserUpdatePipe } from './user.pipe';
+// import { UserUpdatePipe } from './user.pipe';
 
 @Controller('user')
 export class UserController {
@@ -38,9 +38,9 @@ export class UserController {
   }
 
   @Put(':id')
-  @UsePipes(new UserUpdatePipe())
+  // @UsePipes(new UserUpdatePipe())
   @Auth(RoleType.user, RoleType.admin)
-  edit(@Param('id') id: string, @Body() body: UserPutDto) {
+  edit(@Param('id') id: string, @Body() body: UserDto) {
     return this.Service.edit(id, body);
   }
 
