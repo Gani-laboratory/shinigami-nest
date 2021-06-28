@@ -9,7 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto } from '../../filters/user.filter';
+import { UserDto, UserPutDto } from '../../filters/user.filter';
 import { Auth } from '../../decorators/auth.decorator';
 import { RoleType } from '../auth/role-types';
 
@@ -30,16 +30,19 @@ export class UserController {
   }
 
   @Get(':id')
+  @Auth(RoleType.user, RoleType.admin)
   showById(@Param('id') id: string) {
     return this.Service.get('_id', id);
   }
 
   @Put(':id')
-  edit(@Param('id') id: string, @Body() body: UserDto) {
+  @Auth(RoleType.user, RoleType.admin)
+  edit(@Param('id') id: string, @Body() body: UserPutDto) {
     return this.Service.edit(id, body);
   }
 
   @Delete(':id')
+  @Auth(RoleType.user, RoleType.admin)
   delete(@Param('id') id: string) {
     return this.Service.delete(id);
   }
